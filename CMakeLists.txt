@@ -1,19 +1,12 @@
-cmake_minimum_required(VERSION 3.12)
-
-include("./CMakeShared.txt")
+include(${CMAKE_SOURCE_DIR}/cmake/pr_common.cmake)
 
 set(PROJ_NAME pr_audio_dummy)
+pr_add_library(${PROJ_NAME} SHARED)
 
-project(${PROJ_NAME} CXX)
+pr_add_dependency(${PROJ_NAME} shared TARGET PUBLIC)
+pr_add_dependency(${PROJ_NAME} alsoundsystem TARGET PUBLIC)
 
-add_include_dir(glm)
-link_external_library(alsoundsystem)
+pr_add_headers(${PROJ_NAME} "include/")
+pr_add_sources(${PROJ_NAME} "src/")
 
-link_generic_module_libraries()
-register_pragma_module(${PROJ_NAME})
-
-# add_dependencies(${PROJ_NAME} alsoundsystem shared ishared)
-
-set_target_properties(pr_audio_dummy PROPERTIES FOLDER modules/audio)
-
-set_property(GLOBAL PROPERTY PRAGMA_MODULE_SKIP_TARGET_PROPERTY_FOLDER 1)
+pr_finalize(${PROJ_NAME} FOLDER "modules/audio")
