@@ -1,0 +1,6 @@
+{
+    "name": "Dummy Audio",
+    "module_name": "pr_audio_dummy",
+    "install_directory": "modules/audio/dummy/",
+    "release_directory": "modules/audio/dummy/"
+}
