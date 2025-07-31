@@ -220,7 +220,9 @@ namespace al {
 	};
 };
 
-al::DummySoundSystem::DummySoundSystem(float metersPerUnit) : ISoundSystem {metersPerUnit} {}
+al::DummySoundSystem::DummySoundSystem(float metersPerUnit) : ISoundSystem {metersPerUnit} {
+	Initialize();
+}
 
 al::PSoundChannel al::DummySoundSystem::CreateChannel(ISoundBuffer &buffer) { return std::make_shared<DummySoundChannel>(*this, buffer); }
 al::ISoundBuffer *al::DummySoundSystem::DoLoadSound(const std::string &path, bool bConvertToMono, bool bAsync) { return new DummySoundBuffer {}; }
