@@ -1,18 +1,8 @@
 // SPDX-FileCopyrightText: (c) 2021 Silverlan <opensource@pragma-engine.com>
 // SPDX-License-Identifier: MIT
 
-#include "pr_audio_dummy.hpp"
-#include <alsoundsystem.hpp>
-#include <alsound_source.hpp>
-#include <alsound_buffer.hpp>
-#include <alsound_listener.hpp>
-#include <sharedutils/util_pragma.hpp>
+import pragma.soundsystem;
 
-#ifdef __linux__
-#define DLLEXPORT __attribute__((visibility("default")))
-#else
-#define DLLEXPORT __declspec(dllexport)
-#endif
 namespace al {
 	class DummySoundSystem : public ISoundSystem {
 	  public:
@@ -229,7 +219,7 @@ al::ISoundBuffer *al::DummySoundSystem::DoLoadSound(const std::string &path, boo
 std::unique_ptr<al::IListener> al::DummySoundSystem::CreateListener() { return std::make_unique<DummyListener>(*this); }
 
 extern "C" {
-DLLEXPORT bool initialize_audio_api(float metersPerUnit, std::shared_ptr<al::ISoundSystem> &outSoundSystem, std::string &errMsg)
+PR_EXPORT bool initialize_audio_api(float metersPerUnit, std::shared_ptr<al::ISoundSystem> &outSoundSystem, std::string &errMsg)
 {
 	outSoundSystem = std::shared_ptr<al::DummySoundSystem>(new al::DummySoundSystem {metersPerUnit}, [](al::DummySoundSystem *sys) {
 		sys->OnRelease();
