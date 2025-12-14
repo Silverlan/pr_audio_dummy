@@ -3,7 +3,7 @@
 
 import pragma.soundsystem;
 
-namespace al {
+namespace pragma::audio {
 	class DummySoundSystem : public ISoundSystem {
 	  public:
 		DummySoundSystem(float metersPerUnit);
@@ -191,7 +191,7 @@ namespace al {
 
 	class DummyListener : public IListener {
 	  public:
-		DummyListener(al::ISoundSystem &system) : IListener {system} {}
+		DummyListener(pragma::audio::ISoundSystem &system) : IListener {system} {}
 	  private:
 		virtual void DoSetMetersPerUnit(float mu) override {}
 	};
@@ -210,16 +210,16 @@ namespace al {
 	};
 };
 
-al::DummySoundSystem::DummySoundSystem(float metersPerUnit) : ISoundSystem {metersPerUnit} { Initialize(); }
+pragma::audio::DummySoundSystem::DummySoundSystem(float metersPerUnit) : ISoundSystem {metersPerUnit} { Initialize(); }
 
-al::PSoundChannel al::DummySoundSystem::CreateChannel(ISoundBuffer &buffer) { return std::make_shared<DummySoundChannel>(*this, buffer); }
-al::ISoundBuffer *al::DummySoundSystem::DoLoadSound(const std::string &path, bool bConvertToMono, bool bAsync) { return new DummySoundBuffer {}; }
-std::unique_ptr<al::IListener> al::DummySoundSystem::CreateListener() { return std::make_unique<DummyListener>(*this); }
+pragma::audio::PSoundChannel pragma::audio::DummySoundSystem::CreateChannel(ISoundBuffer &buffer) { return std::make_shared<DummySoundChannel>(*this, buffer); }
+pragma::audio::ISoundBuffer *pragma::audio::DummySoundSystem::DoLoadSound(const std::string &path, bool bConvertToMono, bool bAsync) { return new DummySoundBuffer {}; }
+std::unique_ptr<pragma::audio::IListener> pragma::audio::DummySoundSystem::CreateListener() { return std::make_unique<DummyListener>(*this); }
 
 extern "C" {
-PR_EXPORT bool initialize_audio_api(float metersPerUnit, std::shared_ptr<al::ISoundSystem> &outSoundSystem, std::string &errMsg)
+PR_EXPORT bool initialize_audio_api(float metersPerUnit, std::shared_ptr<pragma::audio::ISoundSystem> &outSoundSystem, std::string &errMsg)
 {
-	outSoundSystem = std::shared_ptr<al::DummySoundSystem>(new al::DummySoundSystem {metersPerUnit}, [](al::DummySoundSystem *sys) {
+	outSoundSystem = std::shared_ptr<pragma::audio::DummySoundSystem>(new pragma::audio::DummySoundSystem {metersPerUnit}, [](pragma::audio::DummySoundSystem *sys) {
 		sys->OnRelease();
 		delete sys;
 	});
